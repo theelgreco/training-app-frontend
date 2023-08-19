@@ -1,0 +1,68 @@
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  max-width: 90vw;
+  width: 500px;
+}
+
+.wrapper > div {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.button-container {
+  height: 20%;
+  width: 100%;
+}
+
+.button-container > button,
+.button-container > a {
+  width: 30%;
+  box-sizing: border-box;
+}
+
+.button-container > a > button {
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.friends-container {
+  height: 65%;
+  border: 1px solid;
+  border-radius: 0px;
+  flex-direction: column;
+}
+
+.friends-container > div::-webkit-scrollbar {
+  width: 5px;
+}
+
+.friends-container > div {
+  height: 100%;
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: center;
+  margin-top: 10px;
+  align-items: center;
+  width: 100%;
+  text-align: center;
+  color: white;
+  gap: 40px;
+  overflow-y: scroll;
+}
+
+.wrapper h1 {
+  color: white;
+  width: 100%;
+  text-align: center;
+  box-sizing: border-box;
+  margin-top: 0;
+  margin-bottom: 0;
+  padding: 30px;
+  background: rgb(0 0 0 /50%);
+}

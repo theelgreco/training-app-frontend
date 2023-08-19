@@ -1,0 +1,44 @@
+.textinput-container {
+  position: relative;
+  width: 220px;
+  height: 60px;
+}
+
+.textinput-container input {
+  width: 100%;
+  height: 100%;
+  padding: 1.2rem 0.3rem 0.3rem 0.3rem;
+  font-size: 1.7rem;
+  font-family: "Geo-edit";
+  font-weight: 500;
+}
+
+.textinput-container label {
+  pointer-events: none;
+  color: rgb(0 0 0 /50%);
+  font-family: "Geo-edit";
+  font-weight: 100;
+}
+
+.textinput-container input,
+.textinput-container label {
+  position: absolute;
+  text-wrap: nowrap;
+}
+
+.textinput-container--state-notext label {
+  top: 50%;
+  left: 50%;
+  translate: -50% -50%;
+  font-size: 1.3rem;
+  transition: all 0.1s ease-out;
+}
+
+.textinput-container--state-notext:focus-within label,
+.textinput-container--state-text label {
+  top: 0.4rem;
+  left: 0.4rem;
+  translate: 0% 0%;
+  font-size: 0.7rem;
+  transition: all 0.1s ease-in;
+}

@@ -1,0 +1,27 @@
+.main {
+  text-align: center;
+}
+
+.all_workouts {
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: center;
+  gap: 40px;
+}
+
+.single_workout {
+  border: 1px solid;
+  text-align: center;
+  width: fit-content;
+  padding: 30px;
+}
+
+.single_workout_exercises {
+  display: flex;
+  gap: 50px;
+}
+
+.single_workout_exercises div {
+  padding: 0px 15px;
+  text-align: center;
+}

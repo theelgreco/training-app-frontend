@@ -1,0 +1,145 @@
+@font-face {
+  font-family: "Geo-edit";
+  src: url(/fonts/Geo-edit/geographeditwebblack.ttf);
+  font-style: normal;
+  font-weight: 900;
+}
+
+@font-face {
+  font-family: "Geo-edit";
+  src: url(/fonts/Geo-edit/geographeditwebblackitalic.ttf);
+  font-style: italic;
+  font-weight: 900;
+}
+
+@font-face {
+  font-family: "Geo-edit";
+  src: url(/fonts/Geo-edit/geographeditwebbold.ttf);
+  font-style: normal;
+  font-weight: 700;
+}
+
+@font-face {
+  font-family: "Geo-edit";
+  src: url(/fonts/Geo-edit/geographeditwebbolditalic.ttf);
+  font-style: italic;
+  font-weight: 700;
+}
+
+@font-face {
+  font-family: "Geo-edit";
+  src: url(/fonts/Geo-edit/geographeditwebmedium.ttf);
+  font-style: normal;
+  font-weight: 500;
+}
+
+@font-face {
+  font-family: "Geo-edit";
+  src: url(/fonts/Geo-edit/geographeditwebmediumitalic.ttf);
+  font-style: italic;
+  font-weight: 500;
+}
+
+@font-face {
+  font-family: "Geo-edit";
+  src: url(/fonts/Geo-edit/geographeditwebregular.ttf);
+  font-style: normal;
+  font-weight: 400;
+}
+
+@font-face {
+  font-family: "Geo-edit";
+  src: url(/fonts/Geo-edit/geographeditwebregularitalic.ttf);
+  font-style: italic;
+  font-weight: 400;
+}
+
+@font-face {
+  font-family: "Geo-edit";
+  src: url(/fonts/Geo-edit/geographeditweblight.ttf);
+  font-style: normal;
+  font-weight: 300;
+}
+
+@font-face {
+  font-family: "Geo-edit";
+  src: url(/fonts/Geo-edit/geographeditweblightitalic.ttf);
+  font-style: italic;
+  font-weight: 300;
+}
+
+@font-face {
+  font-family: "Geo-edit";
+  src: url(/fonts/Geo-edit/geographeditwebthin.ttf);
+  font-style: normal;
+  font-weight: 100;
+}
+
+@font-face {
+  font-family: "Geo-edit";
+  src: url(/fonts/Geo-edit/geographeditwebthinitalic.ttf);
+  font-style: italic;
+  font-weight: 100;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html,
+body {
+  background-color: rgb(34, 34, 34);
+  user-select: none;
+  width: 100vw;
+  height: 100svh;
+  overflow: hidden;
+  position: absolute;
+  top: 0;
+  left: 0;
+  margin: 0;
+  padding: 0;
+}
+
+*::-webkit-scrollbar {
+  background: rgb(0 0 0 / 50%);
+  width: 20px;
+}
+
+*::-webkit-scrollbar-thumb {
+  background: rgb(0 0 0);
+  width: 5px;
+}
+
+h1,
+h2,
+h3,
+p {
+  color: white;
+}
+
+h1 {
+  font-family: "Geo-edit";
+  font-weight: 900;
+  font-style: normal;
+}
+
+h2 {
+  font-family: "Geo-edit";
+  font-weight: 700;
+  font-style: normal;
+}
+
+h3 {
+  font-family: "Geo-edit";
+  font-weight: 500;
+  font-style: normal;
+}
+
+p {
+  font-family: "Geo-edit";
+  font-weight: 400;
+  font-style: normal;
+  font-size: 0.8rem;
+}

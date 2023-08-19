@@ -1,0 +1,40 @@
+.request {
+  z-index: 1;
+  position: absolute;
+  width: 600px;
+  max-width: 80vw;
+  height: 90%;
+  border: 1px solid;
+  background-color: rgb(0 0 0 /40%);
+  backdrop-filter: blur(30px);
+  border-radius: 30px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+}
+
+.request > button {
+  position: absolute;
+  top: 0;
+  left: 0;
+  margin-left: 20px;
+  margin-top: 20px;
+  border-radius: 9990px;
+  width: 40px;
+  aspect-ratio: 1;
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+}
+
+.results {
+  height: 70%;
+  width: 90%;
+  display: flex;
+  flex-flow: row wrap;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  color: white;
+}
