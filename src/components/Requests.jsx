@@ -13,7 +13,7 @@ export default function Requests({
 
     try {
       const res = await axios.post(
-        "${process.env.NEXT_PUBLIC_SERVER_URL}/api/request/accept",
+        `${process.env.NEXT_PUBLIC_SERVER_URL}/api/request/accept`,
         payload
       );
       console.log("friends!!");
