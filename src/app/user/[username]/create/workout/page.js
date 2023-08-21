@@ -21,9 +21,9 @@ export default function Page({ params }) {
   const handleAdd = () => {
     const exerciseToAdd = {
       exerciseName: exercise,
-      sets: sets,
-      reps: reps,
-      rest: rest,
+      sets: Number(sets),
+      reps: Number(reps),
+      rest: Number(rest),
     };
     const exercisesCopy = [...exercises];
     exercisesCopy.push(exerciseToAdd);

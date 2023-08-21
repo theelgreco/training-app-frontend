@@ -11,6 +11,7 @@ export default function Page({ params }) {
   const [workout, setWorkout] = useState("");
   const [workouts, setWorkouts] = useState([]);
   const [routine, setRoutine] = useState([]);
+  const [defaultRoutine, setDefaultRoutine] = useState(false);
 
   useEffect(() => {
     fetchWorkouts();
@@ -79,6 +80,8 @@ export default function Page({ params }) {
       username: username,
       routineName: routineName,
       workouts: routine,
+      current: defaultRoutine,
+      nextWorkout: routine[0].workoutName,
     };
 
     try {
@@ -89,6 +92,7 @@ export default function Page({ params }) {
       setRoutineName("");
       setRoutine([]);
       setWorkout(workouts[0].workoutName);
+      setDefaultRoutine(false);
       alert("success");
     } catch (error) {
       console.error(error);
@@ -153,6 +157,19 @@ export default function Page({ params }) {
                   </div>
                 );
               })}
+            </div>
+            <div>
+              <input
+                type="checkbox"
+                id="default"
+                name="default"
+                onChange={(e) => {
+                  setDefaultRoutine(e.target.checked);
+                }}
+              />
+              <label htmlFor="default" style={{ color: "white" }}>
+                Set to default routine?
+              </label>
             </div>
             <Button method={postRoutine} text={"Upload routine"} />
           </section>

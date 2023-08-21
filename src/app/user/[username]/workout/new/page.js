@@ -9,18 +9,28 @@ import Link from "next/link";
 export default function NewWorkout({ params }) {
   const { username } = params;
   const router = useRouter();
-  const [currentSet, setCurrentSet] = useState(null);
-  const [currentExercise, setCurrentExercise] = useState(null);
-  const [currentExerciseName, setCurrentExerciseName] = useState(null);
-  const [currentWorkout, setCurrentWorkout] = useState(null);
-  const [currentWorkoutName, setCurrentWorkoutName] = useState(null);
+
+  const [routineName, setRoutineName] = useState("");
+  const [currentWorkout, setCurrentWorkout] = useState(null); //workout object containing info from db
+
+  const [currentSet, setCurrentSet] = useState(0); // counter to keep track of set
+  const [lastSet, setLastSet] = useState(null); // set counter to change exercise when last set finished
+
+  const [currentExerciseObject, setCurrentExerciseObject] = useState(null); // exercise obj to be pushed to payload
+  const [currentExerciseIndex, setCurrentExerciseIndex] = useState(0); // index to increment once last set finished
+  const [lastExerciseIndex, setLastExerciseIndex] = useState(null);
+
+  const [setWeight, setSetWeight] = useState(""); // wait for current set to be pushed to current exercise obj
+
   const [workoutStarted, setWorkoutStarted] = useState(false);
-  const [lastSet, setLastSet] = useState(null);
   const [workoutFinished, setWorkoutFinished] = useState(false);
-  const [setWeight, setSetWeight] = useState("");
+
+  const [finalWorkoutArray, setFinalWorkoutArray] = useState([]); // Array of exercise objects to send with payload when finished
 
   useEffect(() => {
-    fetchNextWorkout();
+    if (!currentWorkout) {
+      fetchNextWorkout();
+    }
   }, []);
 
   useEffect(() => {
@@ -38,14 +48,17 @@ export default function NewWorkout({ params }) {
   const postWorkout = async () => {
     const msgBody = {
       username: username,
+      routineName: routineName,
       date: new Date(),
-      workout: currentWorkoutName,
-      exercises: currentWorkout,
+      workoutName: currentWorkout.workoutName,
+      exercises: finalWorkoutArray,
     };
+
+    console.log(msgBody);
 
     try {
       await axios.post(
-        `${process.env.NEXT_PUBLIC_SERVER_URL}/api/workouts?username=${username}`,
+        `${process.env.NEXT_PUBLIC_SERVER_URL}/api/${username}/workouthistory`,
         msgBody
       );
       router.push(`/user/${username}`);
@@ -55,60 +68,61 @@ export default function NewWorkout({ params }) {
   };
 
   const fetchNextWorkout = async () => {
-    const lookupObj = { A: "B", B: "A" };
     try {
-      const { data } = await axios.get(
-        `${process.env.NEXT_PUBLIC_SERVER_URL}/api/workouts?username=${username}&order=desc&limit=1`
+      const res = await axios.get(
+        `${process.env.NEXT_PUBLIC_SERVER_URL}/api/${username}/nextworkout`
       );
-      if (!data.workouts.length) {
-        setCurrentWorkoutName("A");
-        setCurrentWorkout(workouts.A);
-      } else {
-        const lastWorkout = data.workouts[0].workout;
-        const nextWorkout = lookupObj[lastWorkout];
-        setCurrentWorkoutName(nextWorkout);
-        setCurrentWorkout(workouts[nextWorkout]);
-      }
+      const data = res.data.nextWorkout;
+      setCurrentWorkout(data.workout);
+      setRoutineName(data.routine);
     } catch (error) {
       console.error(error);
     }
   };
 
   const startWorkout = () => {
-    const workoutCopy = JSON.parse(JSON.stringify(currentWorkout));
-    const ex_name = Object.keys(workoutCopy[0])[0];
+    setCurrentExerciseObject({
+      exerciseName: currentWorkout.exercises[0].exerciseName,
+      sets: [],
+    });
     setWorkoutStarted(true);
-    setCurrentWorkout(workoutCopy);
-    setCurrentSet(0);
-    setCurrentExercise(0);
-    setCurrentExerciseName(ex_name);
-    setLastSet(workoutCopy[0][ex_name].length - 1);
+    setLastSet(currentWorkout.exercises[0].sets - 1);
+    setLastExerciseIndex(currentWorkout.exercises.length - 1);
   };
 
   const handleFinishSet = (e) => {
     e.preventDefault();
-    const workoutCopy = JSON.parse(JSON.stringify(currentWorkout));
-    workoutCopy[currentExercise][currentExerciseName][currentSet] = setWeight;
-    setCurrentWorkout(workoutCopy);
-
-    if (currentSet === lastSet && currentExercise === 2) {
-      setWorkoutFinished(true);
-    } else if (currentSet < lastSet) {
-      setCurrentSet(currentSet + 1);
-    } else {
-      const nextExercise = currentExercise + 1;
-      const ex_name = Object.keys(workoutCopy[nextExercise])[0];
-      setCurrentSet(0);
-      setCurrentExercise(nextExercise);
-      setCurrentExerciseName(ex_name);
-      setLastSet(workoutCopy[nextExercise][ex_name].length - 1);
-    }
-
+    const exerciseCopy = { ...currentExerciseObject };
+    exerciseCopy.sets.push(Number(setWeight));
     setSetWeight("");
+
+    if (currentSet === lastSet && currentExerciseIndex === lastExerciseIndex) {
+      const finalWorkoutArrayCopy = [...finalWorkoutArray];
+      finalWorkoutArrayCopy.push(exerciseCopy);
+      setFinalWorkoutArray(finalWorkoutArrayCopy);
+      setWorkoutFinished(true);
+    } else if (currentSet === lastSet) {
+      const finalWorkoutArrayCopy = [...finalWorkoutArray];
+      const nextExerciseIndex = currentExerciseIndex + 1;
+
+      finalWorkoutArrayCopy.push(exerciseCopy);
+      setFinalWorkoutArray(finalWorkoutArrayCopy);
+
+      setCurrentSet(0);
+      setCurrentExerciseIndex(nextExerciseIndex);
+      setCurrentExerciseObject({
+        exerciseName: currentWorkout.exercises[nextExerciseIndex].exerciseName,
+        sets: [],
+      });
+      setLastSet(currentWorkout.exercises[nextExerciseIndex].sets - 1);
+    } else {
+      setCurrentExerciseObject(exerciseCopy);
+      setCurrentSet(currentSet + 1);
+    }
   };
 
   const handleChange = (e) => {
-    setSetWeight(e.target.value);
+    setSetWeight(Number(e.target.value));
   };
 
   return (
@@ -118,8 +132,8 @@ export default function NewWorkout({ params }) {
       </Link>
       {!workoutStarted ? (
         <div className={styles.start}>
-          {currentWorkoutName ? (
-            <h1>Next Workout: {currentWorkoutName}</h1>
+          {currentWorkout ? (
+            <h1>Next Workout: {currentWorkout.workoutName}</h1>
           ) : (
             <></>
           )}
@@ -127,16 +141,16 @@ export default function NewWorkout({ params }) {
         </div>
       ) : (
         <section className={styles.set}>
-          <h1 className={styles.title}>Workout {currentWorkoutName}</h1>
+          <h1 className={styles.title}>Workout {currentWorkout.workoutName}</h1>
           <div className={styles.content}>
-            <h1>Exercise: {currentExerciseName}</h1>
+            <h1>Exercise: {currentExerciseObject.exerciseName}</h1>
             <h2>
               Set: {currentSet + 1} / {lastSet + 1}
             </h2>
             <form onSubmit={handleFinishSet} className={styles.form}>
               <span>
                 <input
-                  type="text"
+                  type="number"
                   value={setWeight}
                   onChange={handleChange}></input>
                 <label>KG</label>
