@@ -25,7 +25,7 @@ export default function Log({ params }) {
   const fetchWorkouts = async () => {
     try {
       const res = await axios.get(
-        `${process.env.NEXT_PUBLIC_SERVER_URL}/api/workouthistory?username=${username}`
+        `${process.env.NEXT_PUBLIC_SERVER_URL}/api/${username}/workouthistory`
       );
       console.log(res);
       setWorkouts(res.data.workouts);
@@ -53,16 +53,14 @@ export default function Log({ params }) {
                     {workout.exercises.map((exercise, index) => {
                       return (
                         <div key={`${exercise}_${index}`}>
-                          <p>{Object.keys(exercise)[0]}</p>
-                          {exercise[Object.keys(exercise)[0]].map(
-                            (set, index) => {
-                              return (
-                                <p key={`${exercise}_${set}_${index}`}>
-                                  set {index + 1} | {set} kg
-                                </p>
-                              );
-                            }
-                          )}
+                          <p>{exercise.exerciseName}</p>
+                          {exercise.sets.map((set, index) => {
+                            return (
+                              <p key={`${exercise}_${set}_${index}`}>
+                                set {index + 1} | {set} kg
+                              </p>
+                            );
+                          })}
                         </div>
                       );
                     })}
