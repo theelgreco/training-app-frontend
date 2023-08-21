@@ -12,10 +12,6 @@ export default function Home() {
 
   const router = useRouter();
 
-  useEffect(() => {
-    console.log(process.env.NEXT_PUBLIC_SERVER_URL);
-  }, []);
-
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
