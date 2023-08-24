@@ -55,13 +55,13 @@
   justify-content: center;
 }
 
-.container section:nth-of-type(3) > div div {
+/* .container section:nth-of-type(3) > div div {
   display: flex;
   flex-direction: column;
   align-items: center;
   width: 40%;
   text-wrap: nowrap;
-}
+} */
 
 .container section:nth-of-type(2) input {
   width: 40%;

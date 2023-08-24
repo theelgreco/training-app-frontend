@@ -1,9 +1,12 @@
 "use client";
 import styles from "./page.module.css";
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import Textinput from "@/components/Textinput";
 import Button from "@/components/Button";
+import DragContainer from "@/components/DragContainer";
+import Workout from "@/components/Workout";
+import { twoPointer } from "src/utils/utils";
 
 export default function Page({ params }) {
   const { username } = params;
@@ -12,9 +15,11 @@ export default function Page({ params }) {
   const [workouts, setWorkouts] = useState([]);
   const [routine, setRoutine] = useState([]);
   const [defaultRoutine, setDefaultRoutine] = useState(false);
+  const containerRef = React.createRef();
 
   useEffect(() => {
     fetchWorkouts();
+    import("@theelgreco/dragdropreact");
   }, []);
 
   useEffect(() => {
@@ -51,35 +56,14 @@ export default function Page({ params }) {
     setRoutine(routineCopy);
   };
 
-  const handleOrderSelect = (e) => {
-    const indexToInsert = Number(e.target.value);
-    const { id } = e.target;
-    const routineCopy = [...routine];
-    const indexToRemove = findWorkoutIndex(id);
-    const workoutToChange = routineCopy[indexToRemove];
-    const routineRemoved = routineCopy.toSpliced(indexToRemove, 1);
-    const routineAfterAdd = routineRemoved.toSpliced(
-      indexToInsert - 1,
-      0,
-      workoutToChange
-    );
-
-    setRoutine(routineAfterAdd);
-  };
-
-  const findWorkoutIndex = (work_out) => {
-    const routineCopy = [...routine];
-    const index = routineCopy.findIndex((el) => {
-      return work_out === el.workoutName;
-    });
-    return index;
-  };
-
   const postRoutine = async (e) => {
+    const ids = containerRef.current.getIds();
+    const sortedRoutine = twoPointer(ids, routine, "workoutName");
+
     const payload = {
       username: username,
       routineName: routineName,
-      workouts: routine,
+      workouts: sortedRoutine,
       current: defaultRoutine,
       nextWorkout: routine[0].workoutName,
     };
@@ -135,29 +119,24 @@ export default function Page({ params }) {
         )}
         {routine.length ? (
           <section>
-            <div>
-              {routine.map((el, index) => {
-                return (
-                  <div key={`${el.workoutName}_${index}`}>
-                    <p>{el.workoutName}</p>
-                    <select
-                      onChange={handleOrderSelect}
-                      id={el.workoutName}
-                      defaultValue={`${findWorkoutIndex(el.workoutName) + 1}`}>
-                      {routine.map((opt, optIndex) => {
-                        return (
-                          <option
-                            value={`${findWorkoutIndex(opt.workoutName) + 1}`}
-                            key={`${opt.workoutName}_${optIndex}_option`}>
-                            {optIndex + 1}
-                          </option>
-                        );
-                      })}
-                    </select>
-                  </div>
-                );
-              })}
-            </div>
+            <DragContainer
+              data={routine}
+              containerRef={containerRef}
+              containerStyle={{
+                width: "100%",
+                flexFlow: "row wrap",
+                gap: "10px",
+                justifyContent: "center",
+              }}
+              boxStyle={{
+                height: "100px",
+                width: "100px",
+                border: "1px solid",
+                background: "gray",
+              }}
+              idKey={"workoutName"}
+              boxContent={Workout}
+            />
             <div>
               <input
                 type="checkbox"

@@ -1,9 +1,12 @@
 "use client";
 import styles from "./page.module.css";
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import Textinput from "@/components/Textinput";
 import Button from "@/components/Button";
+import DragContainer from "@/components/DragContainer";
+import { twoPointer } from "src/utils/utils";
+import Exercise from "@/components/Exercise";
 
 export default function Page({ params }) {
   const { username } = params;
@@ -13,9 +16,11 @@ export default function Page({ params }) {
   const [reps, setReps] = useState("");
   const [rest, setRest] = useState("");
   const [exercises, setExercises] = useState([]);
+  const containerRef = React.createRef();
 
   useEffect(() => {
     if (exercises.length) console.log(exercises);
+    import("@theelgreco/dragdropreact");
   }, [exercises]);
 
   const handleAdd = () => {
@@ -38,35 +43,14 @@ export default function Page({ params }) {
     setSets("");
   };
 
-  const findExerciseIndex = (exercise) => {
-    const exercisesCopy = [...exercises];
-    const index = exercisesCopy.findIndex((el) => {
-      return exercise === el.exerciseName;
-    });
-    return index;
-  };
-
-  const handleSelectChange = (e) => {
-    const indexToInsert = Number(e.target.value);
-    const { id } = e.target;
-    const exercisesCopy = [...exercises];
-    const indexToRemove = findExerciseIndex(id);
-    const exerciseToChange = exercisesCopy[indexToRemove];
-    const exercisesRemoved = exercisesCopy.toSpliced(indexToRemove, 1);
-    const exerciseAfterAdd = exercisesRemoved.toSpliced(
-      indexToInsert - 1,
-      0,
-      exerciseToChange
-    );
-
-    setExercises(exerciseAfterAdd);
-  };
-
   const postWorkout = async (e) => {
+    const ids = containerRef.current.getIds();
+    const sortedExercises = twoPointer(ids, exercises, "exerciseName");
+
     const payload = {
       username: username,
       workoutName: workoutName,
-      exercises: exercises,
+      exercises: sortedExercises,
     };
 
     try {
@@ -136,31 +120,24 @@ export default function Page({ params }) {
         )}
         {exercises.length ? (
           <section>
-            <div>
-              {exercises.map((ex, index) => {
-                return (
-                  <div key={`${ex.exerciseName}_${index}`}>
-                    <p>{ex.exerciseName}</p>
-                    <select
-                      onChange={handleSelectChange}
-                      id={ex.exerciseName}
-                      defaultValue={`${
-                        findExerciseIndex(ex.exerciseName) + 1
-                      }`}>
-                      {exercises.map((opt, optIndex) => {
-                        return (
-                          <option
-                            value={`${findExerciseIndex(opt.exerciseName) + 1}`}
-                            key={`${ex.exerciseName}_${optIndex}_option`}>
-                            {optIndex + 1}
-                          </option>
-                        );
-                      })}
-                    </select>
-                  </div>
-                );
-              })}
-            </div>
+            <DragContainer
+              data={exercises}
+              containerRef={containerRef}
+              containerStyle={{
+                width: "100%",
+                flexFlow: "row wrap",
+                gap: "10px",
+                justifyContent: "center",
+              }}
+              boxStyle={{
+                height: "100px",
+                width: "100px",
+                border: "1px solid",
+                background: "gray",
+              }}
+              idKey={"exerciseName"}
+              boxContent={Exercise}
+            />
             <Button method={postWorkout} text={"Upload workout"} />
           </section>
         ) : (
