@@ -17,10 +17,10 @@ export default function Page({ params }) {
   const [defaultRoutine, setDefaultRoutine] = useState(false);
   const containerRef = React.createRef();
 
-  useEffect(() => {
-    fetchWorkouts();
-    import("@theelgreco/dragdropreact");
-  }, []);
+  // useEffect(() => {
+  //   fetchWorkouts();
+  //   import("@theelgreco/dragdropreact");
+  // }, []);
 
   useEffect(() => {
     if (workouts.length) console.log(workouts);

@@ -5,15 +5,17 @@ exports.twoPointer = (orderedArr, exerciseArr, key) => {
 
   console.log(orderedArr, exerciseArr, key);
 
-  const exerciseArrDeepCopy = JSON.parse(JSON.stringify(exerciseArr));
+  if (!orderedArr.length || !exerciseArr.length || !key) {
+    return exerciseArr;
+  }
 
   while (pointerOne < orderedArr.length) {
     const orderedName = orderedArr[pointerOne];
-    const unorderedName = exerciseArrDeepCopy[pointerTwo][key];
+    const unorderedName = exerciseArr[pointerTwo][key];
 
     if (orderedName === unorderedName) {
-      res.push(exerciseArrDeepCopy[pointerTwo]);
-      exerciseArrDeepCopy.splice(pointerTwo, 1);
+      res.push(exerciseArr[pointerTwo]);
+
       pointerOne++;
       pointerTwo = 0;
     } else {

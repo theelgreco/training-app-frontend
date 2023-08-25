@@ -18,10 +18,10 @@ export default function Page({ params }) {
   const [exercises, setExercises] = useState([]);
   const containerRef = React.createRef();
 
-  useEffect(() => {
-    if (exercises.length) console.log(exercises);
-    import("@theelgreco/dragdropreact");
-  }, [exercises]);
+  // useEffect(() => {
+  //   if (exercises.length) console.log(exercises);
+  //   import("@theelgreco/dragdropreact");
+  // }, [exercises]);
 
   const handleAdd = () => {
     const exerciseToAdd = {
