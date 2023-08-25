@@ -1,6 +1,5 @@
 import "./globals.css";
 import Script from "next/script";
-import Head from "next/head";
 
 export const metadata = {
   title: "Kakoliris training",
@@ -14,7 +13,7 @@ export default function RootLayout({ children }) {
         {children}
         <Script
           type="text/javascript"
-          src="https://unpkg.com/drag-drop-tool@1.0.1/src/index.js"
+          src="https://unpkg.com/drag-drop-tool@1.0.2/src/index.js"
         />
       </body>
     </html>
