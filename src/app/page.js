@@ -1,5 +1,6 @@
 "use client";
 import styles from "./page.module.css";
+import fonts from "@/styles/fonts.module.css";
 import { useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
 import Button from "@/components/Button";
