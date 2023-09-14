@@ -10,7 +10,7 @@ import axios from "axios";
 export default function Home() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-
+  const load_fonts = fonts;
   const router = useRouter();
 
   const handleLogin = async (e) => {
